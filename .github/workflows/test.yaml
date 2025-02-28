@@ -22,24 +22,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up environment
-        run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
-          else
-            echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
-          fi
+        run: echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
 
       - name: Make install.sh executable
         if: runner.os != 'Windows'
         run: chmod +x ./install.sh
 
-      - name: Install Arturo
-        run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            ./install.ps1
-          else
-            ./install.sh
-          fi
+      - name: Install Arturo (DOS)
+        if: matrix.os == 'windows-latest'
+        run: ./install.ps1
+    
+      - name: Install Arturo (UNIX)
+        if: matrix.os != 'windows-latest'
+        run: ./install.sh
 
       - name: Test Arturo
         run: arturo hello.art
