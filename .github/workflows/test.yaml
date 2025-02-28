@@ -29,6 +29,10 @@ jobs:
             echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
           fi
 
+      - name: Make install.sh executable
+        if: runner.os != 'Windows'
+        run: chmod +x ./install.sh
+
       - name: Install Arturo
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
