@@ -1,0 +1,3 @@
+#! arturo
+
+print "hello, world!"
