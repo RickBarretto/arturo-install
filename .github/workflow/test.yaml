@@ -1,0 +1,40 @@
+name: Test Arturo's Installation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up environment
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
+          else
+            echo "PATH=$HOME/.arturo/bin:$PATH" >> $GITHUB_ENV
+          fi
+
+      - name: Install Arturo
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            ./install.ps1
+          else
+            ./install.sh
+          fi
+
+      - name: Test Arturo
+        run: arturo hello.art
